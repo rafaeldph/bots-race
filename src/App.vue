@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <Map :robots="robots" :center="center" />
+    <Map :robots="robots" :center="center" :setCenter="setCenter" />
     <Dashboard :robots="robots" />
   </div>
 </template>
 
 <script>
-import Map from './components/Map.vue'
-import Dashboard from './components/Dashboard.vue'
+import Map from './components/Map.vue';
+import Dashboard from './components/Dashboard.vue';
 
 export default {
   name: 'App',
@@ -19,9 +19,14 @@ export default {
     return {
       robots: [],
       center: null,
-    }
+    };
   },
-}
+  methods: {
+    setCenter({ x, y }) {
+      this.center = { x, y };
+    },
+  },
+};
 </script>
 
 <style>

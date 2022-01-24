@@ -6,5 +6,5 @@
 export default {
   name: 'Dashboard',
   props: ['robots'],
-}
+};
 </script>
