@@ -1,7 +1,24 @@
 <template>
   <div class="map" @click="onSelectCenter">
-    <img src="../assets/map.png" />
-    <div v-if="center !== null" class="map-center" :style="{ top: `${center.y}%`, left: `${center.x}%` }">C</div>
+    <img 
+      src="../assets/map.png" 
+      :class="['map-img', center === null && 'clickable-img']" 
+    />
+
+    <img 
+      v-if="center !== null" 
+      src="../assets/target-sign.png"
+      class="map-icon" 
+      :style="{ top: `${center.y}%`, left: `${center.x}%` }"
+    />
+
+    <img
+      v-for="({ current: { x, y } }, i) in robots"
+      :Key="i"
+      src="../assets/robot.png"
+      class="map-icon"
+      :style="{ top: `${y}%`, left: `${x}%` }"
+    />
   </div>
 </template>
 
@@ -27,22 +44,18 @@ export default {
   position: relative;
 }
 
-.map > img {
+.map-img {
   max-width: 100%;
 }
 
-.map-center {
+.clickable-img {
+  cursor: pointer;
+}
+
+.map-icon {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 100%;
-  background-color: darkred;
-  color: white;
-  font-weight: 700;
-  border: 3px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 30px;
+  height: 30px;
   transform: translate(-50%, -50%);
 }
 </style>
