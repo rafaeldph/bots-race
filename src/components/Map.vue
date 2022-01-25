@@ -20,11 +20,11 @@
       :style="{ top: `${y}%`, left: `${x}%` }"
     />
 
-    <div class="measure-container" :style="{ width: `${(this.delta * 100)}%` }">
+    <div class="measure-container" :style="{ width: `${(this.delta * 500)}%` }">
       <div class="measure">
         <div class="line"></div>
       </div>
-      <div class="measure-title">100m</div>
+      <div class="measure-title">500m</div>
     </div>
   </div>
 </template>

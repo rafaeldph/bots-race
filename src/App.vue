@@ -7,7 +7,7 @@
       :setCenter="initView"
     />
     <Dashboard 
-      :robots="robots" 
+      :robots="formattedRobots" 
       :started="center !== null" 
       :addBot="addBot"
     />
@@ -36,6 +36,15 @@ export default {
       delta: 0.05,
     };
   },
+  computed: {
+    formattedRobots() {
+      return this.robots.map(({ initial, current, battery }) => ({
+        battery: formatNumber(battery),
+        traveled: formatNumber(calculateDistance(initial, current) / this.delta),
+        distance: formatNumber(calculateDistance(current, this.center) / this.delta),
+      }));
+    }
+  },
   methods: {
     initView({ x, y }) {
       this.setCenter({ x, y });
@@ -49,6 +58,11 @@ export default {
       for (const i of Object.keys(this.robots)) {
         let robot = this.robots[i];
 
+        const distance = calculateDistance(robot.current, this.center);
+        if (!distance) {
+          continue;
+        }
+
         if (robot.chargingTime > 0) {
           this.robots[i].chargingTime--;
           continue; 
@@ -59,19 +73,18 @@ export default {
           continue;
         }
 
+        const angle = calculateAngle(robot.current, this.center);
+        let move = (50 + Math.random() * 50) * this.delta;
+        if (move > distance) {
+          move = distance;
+        }
+
         let { chargingTime } = robot;
         const batteryLoss = MIN_BATTERY + Math.random() * 20;
         let battery = robot.battery - batteryLoss;
         if (battery < 0) {
           battery = 0;
           chargingTime = 5;
-        }
-
-        const angle = calculateAngle(robot.current, this.center);
-        const distance = calculateDistance(robot.current, this.center);
-        let move = (50 + Math.random() * 50) * this.delta;
-        if (move > distance) {
-          move = distance;
         }
 
         this.robots[i] = {
