@@ -55,22 +55,24 @@ export default {
     updateView() {
       this.time++;
 
-      for (const i of Object.keys(this.robots)) {
-        let robot = this.robots[i];
-
+      this.robots = this.robots.map((robot) => {
         const distance = calculateDistance(robot.current, this.center);
         if (!distance) {
-          continue;
+          return robot;
         }
 
         if (robot.chargingTime > 0) {
-          this.robots[i].chargingTime--;
-          continue; 
+          return {
+            ...robot,
+            chargingTime: robot.chargingTime - 1,
+          }
         }
 
-        if (battery < MIN_BATTERY) {
-          this.robots[i].battery = 100;
-          continue;
+        if (robot.battery < MIN_BATTERY) {
+          return { 
+            ...robot, 
+            battery: 100,
+          };
         }
 
         const angle = calculateAngle(robot.current, this.center);
@@ -87,7 +89,7 @@ export default {
           chargingTime = 5;
         }
 
-        this.robots[i] = {
+        return {
           ...robot,
           current: {
             x: robot.current.x + Math.sin(angle) * move,
@@ -96,7 +98,7 @@ export default {
           battery,
           chargingTime,
         };
-      }
+      });
     },
     setCenter({ x, y }) {
       this.center = { x, y };

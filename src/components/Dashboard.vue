@@ -1,6 +1,9 @@
 <template>
   <div class="dashboard">
-    <h1>Bots race</h1>
+    <div class="dashboard-title">
+      <h1>Bots race</h1>
+      <button v-if="started" @click="addBot">+</button>
+    </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
       <div v-else v-for="(robot, i) in robots" :key="i" class="robot-info">
@@ -16,7 +19,7 @@
 <script>
 export default {
   name: 'Dashboard',
-  props: ['robots', 'started'],
+  props: ['robots', 'started', 'addBot'],
 };
 </script>
 
@@ -29,6 +32,14 @@ export default {
   justify-content: flex-start;
   align-items: flex-start;
   padding: 15px;
+}
+
+.dashboard-title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dashboard-content {
