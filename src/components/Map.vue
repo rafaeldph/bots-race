@@ -8,7 +8,7 @@
     <img 
       v-if="center !== null" 
       src="../assets/target-sign.png"
-      class="map-icon" 
+      class="map-icon target-icon" 
       :style="{ top: `${center.y}%`, left: `${center.x}%` }"
     />
 
@@ -16,7 +16,7 @@
       v-for="({ current: { x, y } }, i) in robots"
       :Key="i"
       src="../assets/robot.png"
-      class="map-icon"
+      class="map-icon robot-icon"
       :style="{ top: `${y}%`, left: `${x}%` }"
     />
   </div>
@@ -48,6 +48,7 @@ export default {
 
 .map-img {
   max-width: 100%;
+  opacity: 0.75;
 }
 
 .clickable-img {
@@ -59,5 +60,12 @@ export default {
   width: 30px;
   height: 30px;
   transform: translate(-50%, -50%);
+}
+
+.target-icon {
+  z-index: 2;
+}
+.robot-icon {
+  z-index: 1;
 }
 </style>

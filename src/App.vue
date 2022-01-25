@@ -17,9 +17,9 @@
 import Map from './components/Map.vue';
 import Dashboard from './components/Dashboard.vue';
 import { formatNumber } from './utils/numbers';
-import { calculateAngle } from './utils/distances';
+import { calculateAngle, calculateDistance } from './utils/distances';
 
-const DELTA = 0.1;
+const DELTA = 0.05;
 const MIN_BATTERY = 10;
 
 export default {
@@ -56,20 +56,29 @@ export default {
           continue;
         }
 
-        const batteryLoss = 10 + Math.random() * 20;
+        let { chargingTime } = robot;
+        const batteryLoss = MIN_BATTERY + Math.random() * 20;
         let battery = robot.battery - batteryLoss;
-        if (battery < 0) battery = 0;
+        if (battery < 0) {
+          battery = 0;
+          chargingTime = 6;
+        }
 
-        const distance = (50 + Math.random() * 50) * DELTA;
         const angle = calculateAngle(robot.current, this.center);
+        const distance = calculateDistance(robot.current, this.center);
+        let move = (50 + Math.random() * 50) * DELTA;
+        if (move > distance) {
+          move = distance;
+        }
 
         this.robots[i] = {
           ...robot,
           current: {
-            x: robot.current.x + Math.sin(angle) * distance,
-            y: robot.current.y + Math.cos(angle) * distance,
+            x: robot.current.x + Math.sin(angle) * move,
+            y: robot.current.y + Math.cos(angle) * move,
           },
           battery,
+          chargingTime,
         };
       }
     },
