@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { formatNumber } from '../utils/numbers';
+
 export default {
   name: 'Map',
   props: ['robots', 'center', 'setCenter'],
@@ -31,8 +33,8 @@ export default {
       if (this.center !== null) return;
 
       this.setCenter({
-        x: (offsetX / width) * 100,
-        y: (offsetY / height) * 100,
+        x: formatNumber(offsetX / width * 100),
+        y: formatNumber(offsetY / height * 100),
       });
     },
   },
