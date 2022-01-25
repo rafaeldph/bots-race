@@ -48,22 +48,10 @@ export default {
     },
     robotIndexesPodium() {
       const distances = this.formattedRobots.map(({ distance }) => distance);
-      const timestamps = (Math.min(...distances) === 0) ? this.formattedRobots.map(({ finishedTimestamp }) => finishedTimestamp) : [];
-
-      if (!distances.filter(distance => distance !== 0).length) {
-        return {
-          currentNearest: -1,
-          nearest: this.formattedRobots.findIndex(({ finishedTimestamp }) => finishedTimestamp === Math.min(...timestamps)),
-          farthest: this.formattedRobots.findIndex(({ finishedTimestamp }) => finishedTimestamp === Math.max(...timestamps)),
-        };
-      }
       
       return {
-        currentNearest: this.formattedRobots.findIndex(({ distance }) => distance === Math.min(...distances.filter(distance => distance !== 0))),
-        nearest: Math.min(...distances) === 0 ?
-          this.formattedRobots.findIndex(({ finishedTimestamp }) => finishedTimestamp === Math.min(...timestamps.filter(timestamp => timestamp !== -1)))
-          : this.formattedRobots.findIndex(({ distance }) => distance === Math.min(...distances)),
-        farthest: this.formattedRobots.findIndex(({ distance }) => distance === Math.max(...distances)),
+        nearest: this.formattedRobots.findIndex(({ distance }) => distance === Math.min(...distances.filter(distance => distance !== 0))),
+        farthest: this.formattedRobots.findIndex(({ distance }) => distance === Math.max(...distances.filter(distance => distance !== 0))),
       };
     },
   },
@@ -114,6 +102,7 @@ export default {
 
         return {
           ...robot,
+          path: [...robot.path, robot.current],
           current: {
             x: robot.current.x + Math.sin(angle) * move,
             y: robot.current.y + Math.cos(angle) * move,
@@ -143,6 +132,7 @@ export default {
         battery: 100,
         chargingTime: 0,
         finishedTimestamp: -1,
+        path: [],
       });
     }
   },

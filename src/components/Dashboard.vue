@@ -12,8 +12,8 @@
         :key="i" 
         :class="[
           'robot-info', 
+          robot.distance !== 0 && 'walking-robot',
           i === podium.farthest && 'farthest-robot', 
-          i === podium.currentNearest && 'current-nearest-robot',
           i === podium.nearest && 'nearest-robot',
         ]"
       >
@@ -66,17 +66,17 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  background-color: yellow;
+  background-color: var(--background-color);
 }
 
-.farthest-robot {
-  background-color: red;
+.walking-robot {
+  --background-color: yellow;
 }
-.current-nearest-robot {
-  background-color: greenyellow;
+.farthest-robot {
+  --background-color: red;
 }
 .nearest-robot {
-  background-color: green;
+  --background-color: green;
 }
 
 .robot-title {
