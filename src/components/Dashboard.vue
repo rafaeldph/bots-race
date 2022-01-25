@@ -1,8 +1,11 @@
 <template>
   <div class="dashboard">
     <div class="dashboard-title">
-      <h1>Bots race</h1>
-      <button class="button" v-if="started" @click="addBot">+</button>
+      <div>
+        <h1>Bots race</h1>
+        <p v-if="started">{{ formatTime(time) }}</p>
+      </div>
+      <button class="title-button" v-if="started" @click="addBot">+</button>
     </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
@@ -27,9 +30,16 @@
 </template>
 
 <script>
+import { formatTime } from '../utils/formats';
+
 export default {
   name: 'Dashboard',
-  props: ['robots', 'started', 'podium', 'addBot'],
+  props: ['robots', 'time', 'started', 'podium', 'addBot'],
+  computed: {
+    formatTime() {
+      return formatTime;
+    },
+  },
 };
 </script>
 
@@ -50,10 +60,24 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 25px;
 }
 
 .dashboard-title > h1 {
   margin: 0;
+}
+
+.title-button {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 15px;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .dashboard-content {

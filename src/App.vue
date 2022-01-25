@@ -7,6 +7,7 @@
       :setCenter="initView"
     />
     <Dashboard 
+      :time="time"
       :robots="formattedRobots" 
       :started="center !== null" 
       :podium="robotIndexesPodium"
@@ -18,7 +19,7 @@
 <script>
 import Map from './components/Map.vue';
 import Dashboard from './components/Dashboard.vue';
-import { formatNumber } from './utils/numbers';
+import { formatNumber } from './utils/formats';
 import { calculateAngle, calculateDistance } from './utils/distances';
 
 const MIN_BATTERY = 10;
@@ -68,11 +69,14 @@ export default {
       this.setCenter({ x, y });
       this.setInitialBots();
 
-      setInterval(this.updateView, 1000);
+      this.timer = setInterval(this.updateView, 1000);
     },
     updateView() {
-      this.time++;
+      if (!this.robots.map(({ current }) => calculateDistance(current, this.center)).filter(distance => distance !== 0).length) {
+        clearInterval(this.timer);
+      }
 
+      this.time++;
       this.robots = this.robots.map((robot) => {
         const distance = calculateDistance(robot.current, this.center);
         if (!distance) {
@@ -124,7 +128,7 @@ export default {
       this.center = { x, y };
     },
     setInitialBots() {
-      for (let i = 0; i < 5 + Math.random() * 5; i++) {
+      for (let i = 0; i < 5 + Math.round(Math.random() * 5); i++) {
         this.addBot();
       }
     },

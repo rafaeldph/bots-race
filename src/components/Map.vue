@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { formatNumber } from '../utils/numbers';
+import { formatNumber } from '../utils/formats';
 
 export default {
   name: 'Map',
