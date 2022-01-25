@@ -10,7 +10,12 @@
         v-else 
         v-for="(robot, i) in robots" 
         :key="i" 
-        :class="['robot-info', i === podium.farthest && 'farthest-robot', i === podium.nearest && 'nearest-robot']"
+        :class="[
+          'robot-info', 
+          i === podium.farthest && 'farthest-robot', 
+          i === podium.currentNearest && 'current-nearest-robot',
+          i === podium.nearest && 'nearest-robot',
+        ]"
       >
         <div class="robot-title">Robot {{ (i + 1) }}</div>
         <div>Batería: {{ robot.battery }}%</div>
@@ -66,6 +71,9 @@ export default {
 
 .farthest-robot {
   background-color: red;
+}
+.current-nearest-robot {
+  background-color: greenyellow;
 }
 .nearest-robot {
   background-color: green;
