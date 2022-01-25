@@ -2,7 +2,7 @@
   <div class="dashboard">
     <div class="dashboard-title">
       <h1>Bots race</h1>
-      <button v-if="started" @click="addBot">+</button>
+      <button class="button" v-if="started" @click="addBot">+</button>
     </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
@@ -50,6 +50,10 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+}
+
+.dashboard-title > h1 {
+  margin: 0;
 }
 
 .dashboard-content {

@@ -22,6 +22,11 @@ import { formatNumber } from './utils/numbers';
 import { calculateAngle, calculateDistance } from './utils/distances';
 
 const MIN_BATTERY = 10;
+const INITIAL_VALUES = {
+  robots: [],
+  center: null,
+  time: 0,
+};
 
 export default {
   name: 'App',
@@ -31,9 +36,7 @@ export default {
   },
   data() {
     return {
-      robots: [],
-      center: null,
-      time: 0,
+      ...INITIAL_VALUES,
       delta: 0.05,
     };
   },
@@ -56,6 +59,11 @@ export default {
     },
   },
   methods: {
+    restartView() {
+      for (const key of Object.keys(INITIAL_VALUES)) {
+        this[key] = INITIAL_VALUES[key];
+      }
+    },
     initView({ x, y }) {
       this.setCenter({ x, y });
       this.setInitialBots();
