@@ -3,6 +3,7 @@
     <Map 
       :robots="robots" 
       :center="center" 
+      :delta="delta"
       :setCenter="initView"
     />
     <Dashboard 
@@ -19,7 +20,6 @@ import Dashboard from './components/Dashboard.vue';
 import { formatNumber } from './utils/numbers';
 import { calculateAngle, calculateDistance } from './utils/distances';
 
-const DELTA = 0.05;
 const MIN_BATTERY = 10;
 
 export default {
@@ -33,6 +33,7 @@ export default {
       robots: [],
       center: null,
       time: 0,
+      delta: 0.05,
     };
   },
   methods: {
@@ -43,11 +44,13 @@ export default {
       setInterval(this.updateView, 1000);
     },
     updateView() {
+      this.time++;
+
       for (const i of Object.keys(this.robots)) {
         let robot = this.robots[i];
 
         if (robot.chargingTime > 0) {
-          this.robots[i].chargingTime -= 1;
+          this.robots[i].chargingTime--;
           continue; 
         }
 
@@ -61,12 +64,12 @@ export default {
         let battery = robot.battery - batteryLoss;
         if (battery < 0) {
           battery = 0;
-          chargingTime = 6;
+          chargingTime = 5;
         }
 
         const angle = calculateAngle(robot.current, this.center);
         const distance = calculateDistance(robot.current, this.center);
-        let move = (50 + Math.random() * 50) * DELTA;
+        let move = (50 + Math.random() * 50) * this.delta;
         if (move > distance) {
           move = distance;
         }
@@ -100,7 +103,7 @@ export default {
         initial: point,
         current: point,
         battery: 100,
-        chargingTime: 1,
+        chargingTime: 0,
       });
     }
   },

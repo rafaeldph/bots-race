@@ -19,6 +19,13 @@
       class="map-icon robot-icon"
       :style="{ top: `${y}%`, left: `${x}%` }"
     />
+
+    <div class="measure-container" :style="{ width: `${(this.delta * 100)}%` }">
+      <div class="measure">
+        <div class="line"></div>
+      </div>
+      <div class="measure-title">100m</div>
+    </div>
   </div>
 </template>
 
@@ -27,7 +34,7 @@ import { formatNumber } from '../utils/numbers';
 
 export default {
   name: 'Map',
-  props: ['robots', 'center', 'setCenter'],
+  props: ['robots', 'center', 'delta', 'setCenter'],
   methods: {
     onSelectCenter({ offsetX, offsetY, target: { width, height } }) {
       if (this.center !== null) return;
@@ -67,5 +74,28 @@ export default {
 }
 .robot-icon {
   z-index: 1;
+}
+
+.measure-container {
+  position: absolute;
+  bottom: 2.5%;
+  right: 2.5%;
+}
+
+.measure {
+  padding: 3px 0;
+  height: 9px;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+}
+
+.measure > .line {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.measure-title {
+  text-align: center;
 }
 </style>
