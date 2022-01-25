@@ -18,9 +18,9 @@
         ]"
       >
         <div class="robot-title">Robot {{ (i + 1) }}</div>
-        <div>Batería: {{ robot.battery }}%</div>
         <div>Recorrido: {{ robot.traveled }}</div>
         <div>Restante: {{ robot.distance }}</div>
+        <div v-if="robot.distance > 0">Batería: {{ robot.battery }}%</div>
       </div>
     </div>
   </div>
