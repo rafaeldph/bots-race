@@ -9,6 +9,7 @@
     <Dashboard 
       :robots="formattedRobots" 
       :started="center !== null" 
+      :podium="robotIndexesPodium"
       :addBot="addBot"
     />
   </div>
@@ -43,7 +44,15 @@ export default {
         traveled: formatNumber(calculateDistance(initial, current) / this.delta),
         distance: formatNumber(calculateDistance(current, this.center) / this.delta),
       }));
-    }
+    },
+    robotIndexesPodium() {
+      const distances = this.formattedRobots.map(({ distance }) => distance);
+      
+      return {
+        nearest: this.formattedRobots.findIndex(({ distance }) => distance === Math.min(...distances)),
+        farthest: this.formattedRobots.findIndex(({ distance }) => distance === Math.max(...distances)),
+      };
+    },
   },
   methods: {
     initView({ x, y }) {

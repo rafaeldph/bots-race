@@ -6,7 +6,12 @@
     </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
-      <div v-else v-for="(robot, i) in robots" :key="i" class="robot-info">
+      <div 
+        v-else 
+        v-for="(robot, i) in robots" 
+        :key="i" 
+        :class="['robot-info', i === podium.farthest && 'farthest-robot', i === podium.nearest && 'nearest-robot']"
+      >
         <div class="robot-title">Robot {{ (i + 1) }}</div>
         <div>Batería: {{ robot.battery }}%</div>
         <div>Recorrido: {{ robot.traveled }}</div>
@@ -19,7 +24,7 @@
 <script>
 export default {
   name: 'Dashboard',
-  props: ['robots', 'started', 'addBot'],
+  props: ['robots', 'started', 'podium', 'addBot'],
 };
 </script>
 
@@ -56,6 +61,14 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  background-color: yellow;
+}
+
+.farthest-robot {
+  background-color: red;
+}
+.nearest-robot {
+  background-color: green;
 }
 
 .robot-title {

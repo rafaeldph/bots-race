@@ -18,7 +18,6 @@
       src="../assets/robot.png"
       class="map-icon robot-icon"
       :style="{ top: `${y}%`, left: `${x}%` }"
-      :title="(i+1)"
     />
 
     <div class="measure-container" :style="{ width: `${(this.delta * 500)}%` }">
