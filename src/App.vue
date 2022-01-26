@@ -184,7 +184,7 @@ body {
   display: flex;
   margin: 0;
   padding: 0;
-  width: 100vw;
+  width: 100%;
   height: 100%;
   min-height: 100vh;
 }

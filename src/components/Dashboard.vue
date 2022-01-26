@@ -23,11 +23,17 @@
         >&#8635;</button>
       </div>
     </div>
+    <div class="dashboard-header" v-if="started">
+      <p>Ordenar por:</p>
+      <select class="sort-select" v-model="sortCriteria">
+        <option v-for="({ title }, i) in sortCriterias" :key="i" :value="i">{{ title }}</option>
+      </select>
+    </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
       <div 
         v-else 
-        v-for="robot in robots" 
+        v-for="robot in sortedRobots" 
         :key="robot.index" 
         :class="[
           'robot-info', 
@@ -54,6 +60,28 @@
 <script>
 import { formatTime } from '../utils/formats';
 
+const SORTED_CRITERIAS = [
+  {
+    title: 'Por defecto',
+    action: () => true,
+  },
+  {
+    title: 'Más cercano a la meta',
+    action: (a, b) => {
+      if (a.distance === 0 && b.distance === 0) {
+        return a.finishedTime - b.finishedTime;
+      }
+      return a.distance - b.distance;
+    },
+  },
+  {
+    title: 'Mayor distancia recorrida',
+    action: (a, b) => {
+      return b.traveled - a.traveled;
+    },
+  },
+];
+
 export default {
   name: 'Dashboard',
   props: [
@@ -66,9 +94,20 @@ export default {
     'addBot',
     'restart',
   ],
+  data() {
+    return {
+      sortCriteria: 0,
+    };
+  },
   computed: {
     formatTime() {
       return formatTime;
+    },
+    sortCriterias() {
+      return SORTED_CRITERIAS;
+    },
+    sortedRobots() {
+      return [...this.robots].sort(SORTED_CRITERIAS[this.sortCriteria].action);
     },
   },
 };
@@ -91,7 +130,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 10px;
 }
 
 .dashboard-title h1, .dashboard-title p {
@@ -139,6 +178,13 @@ export default {
 
 .header-button:not(:last-child) {
   margin-right: 5px;
+}
+
+.sort-select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: none;
 }
 
 .dashboard-content {
