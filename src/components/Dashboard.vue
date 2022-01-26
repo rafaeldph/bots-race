@@ -69,7 +69,7 @@ const SORTED_CRITERIAS = [
     title: 'Más cercano a la meta',
     action: (a, b) => {
       if (a.distance === 0 && b.distance === 0) {
-        return a.finishedTime - b.finishedTime;
+        return a.finishedTimestamp - b.finishedTimestamp;
       }
       return a.distance - b.distance;
     },
