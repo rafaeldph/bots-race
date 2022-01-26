@@ -13,10 +13,15 @@
     />
 
     <img
-      v-for="({ current: { x, y } }, i) in robots.filter(({ current: { x, y } }) => x != center.x || y != center.y)"
-      :Key="i"
+      v-for="({ current: { x, y }, distance }, i) in robots"
+      :key="i"
       src="../assets/robot.png"
-      class="map-icon robot-icon"
+      :class="[
+        'map-icon', 
+        i === podium.farthest && 'last-robot', 
+        i === podium.nearest && 'first-robot',
+        distance === 0 && 'hidden-icon',
+      ]"
       :style="{ top: `${y}%`, left: `${x}%` }"
     />
 
@@ -34,7 +39,7 @@ import { formatNumber } from '../utils/formats';
 
 export default {
   name: 'Map',
-  props: ['robots', 'center', 'delta', 'setCenter'],
+  props: ['robots', 'center', 'delta', 'setCenter', 'podium'],
   methods: {
     onSelectCenter({ offsetX, offsetY, target: { width, height } }) {
       if (this.center !== null) return;
@@ -72,8 +77,20 @@ export default {
 .target-icon {
   z-index: 2;
 }
-.robot-icon {
-  z-index: 1;
+
+.hidden-icon {
+  display: none;
+}
+
+.first-robot {
+  --border-color: green;
+}
+.last-robot {
+  --border-color: red;
+}
+.first-robot, .last-robot {
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
 }
 
 .measure-container {

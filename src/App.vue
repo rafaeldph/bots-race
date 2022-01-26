@@ -1,10 +1,11 @@
 <template>
   <div class="container">
     <Map 
-      :robots="robots" 
+      :robots="formattedRobots" 
       :center="center" 
       :delta="delta"
       :setCenter="initView"
+      :podium="robotIndexesPodium"
     />
     <Dashboard 
       :time="time"
@@ -48,6 +49,7 @@ export default {
         traveled: formatNumber(calculateDistance(initial, current) / this.delta),
         distance: formatNumber(calculateDistance(current, this.center) / this.delta),
         finishedTimestamp,
+        current,
       }));
     },
     robotIndexesPodium() {
