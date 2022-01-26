@@ -1,11 +1,27 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard-title">
-      <div>
+    <div class="dashboard-header">
+      <div class="dashboard-title">
         <h1>Bots race</h1>
-        <p v-if="started">{{ formatTime(time) }}</p>
+        <div class="subtitle" v-if="started">
+          <p class="time-subtitle">{{ formatTime(time) }}</p>
+          <button v-if="!finished" class="control-button" @click="togglePause">&#9199;</button>
+        </div>
       </div>
-      <button class="title-button" v-if="started" @click="addBot">+</button>
+      <div class="header-buttons">
+        <button 
+          v-if="started && !finished" 
+          class="header-button" 
+          @click="addBot"
+          title="Añadir robot"
+        >+</button>
+        <button 
+          v-if="started" 
+          class="header-button" 
+          @click="restart"
+          title="Iniciar una nueva carrera"
+        >&#8635;</button>
+      </div>
     </div>
     <div class="dashboard-content">
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
@@ -34,7 +50,16 @@ import { formatTime } from '../utils/formats';
 
 export default {
   name: 'Dashboard',
-  props: ['robots', 'time', 'started', 'podium', 'addBot'],
+  props: [
+    'robots', 
+    'time', 
+    'started', 
+    'finished', 
+    'podium', 
+    'togglePause',
+    'addBot',
+    'restart',
+  ],
   computed: {
     formatTime() {
       return formatTime;
@@ -54,7 +79,7 @@ export default {
   padding: 15px;
 }
 
-.dashboard-title {
+.dashboard-header {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -63,11 +88,36 @@ export default {
   margin-bottom: 25px;
 }
 
-.dashboard-title > h1 {
+.dashboard-title h1, .dashboard-title p {
   margin: 0;
 }
 
-.title-button {
+.subtitle {
+  display: flex;
+  flex-direction: row;
+}
+
+.time-subtitle {
+  color: #444;
+}
+
+.control-button {
+  font-size: 14px;
+  margin-left: 5px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.header-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.header-button {
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -78,6 +128,11 @@ export default {
   padding: 5px 15px;
   font-size: 18px;
   font-weight: 700;
+  height: 36px;
+}
+
+.header-button:not(:last-child) {
+  margin-right: 5px;
 }
 
 .dashboard-content {

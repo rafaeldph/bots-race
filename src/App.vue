@@ -9,9 +9,12 @@
     <Dashboard 
       :time="time"
       :robots="formattedRobots" 
-      :started="center !== null" 
+      :started="started"
+      :finished="finished"
       :podium="robotIndexesPodium"
       :addBot="addBot"
+      :togglePause="() => !paused ? stopTimer() : startTimer()"
+      :restart="restartView"
     />
   </div>
 </template>
@@ -23,11 +26,6 @@ import { formatNumber } from './utils/formats';
 import { calculateAngle, calculateDistance } from './utils/distances';
 
 const MIN_BATTERY = 10;
-const INITIAL_VALUES = {
-  robots: [],
-  center: null,
-  time: 0,
-};
 
 export default {
   name: 'App',
@@ -37,7 +35,9 @@ export default {
   },
   data() {
     return {
-      ...INITIAL_VALUES,
+      robots: [],
+      center: null,
+      time: 0,
       delta: 0.05,
     };
   },
@@ -58,22 +58,40 @@ export default {
         farthest: this.formattedRobots.findIndex(({ distance }) => distance === Math.max(...distances.filter(distance => distance !== 0))),
       };
     },
+    started() {
+      return this.center !== null;
+    },
+    finished() {
+      return !this.formattedRobots.map(({ distance }) => distance).filter(distance => distance > 0).length;
+    },
   },
   methods: {
+    returnToInitialState() {
+      this.robots = [];
+      this.center = null
+      this.time = 0;
+    },
+    startTimer() {
+      this.paused = false;
+      this.timer = setInterval(this.updateView, 1000);
+    },
+    stopTimer() {
+      clearInterval(this.timer);
+      this.paused = true;
+    },
     restartView() {
-      for (const key of Object.keys(INITIAL_VALUES)) {
-        this[key] = INITIAL_VALUES[key];
-      }
+      this.stopTimer();
+      this.returnToInitialState();
     },
     initView({ x, y }) {
       this.setCenter({ x, y });
       this.setInitialBots();
-
-      this.timer = setInterval(this.updateView, 1000);
+      this.startTimer();
     },
     updateView() {
-      if (!this.robots.map(({ current }) => calculateDistance(current, this.center)).filter(distance => distance !== 0).length) {
-        clearInterval(this.timer);
+      if (!this.robots.map(({ current }) => calculateDistance(current, this.center)).filter(distance => distance > 0).length) {
+        this.stopTimer();
+        return;
       }
 
       this.time++;
@@ -87,7 +105,7 @@ export default {
           return {
             ...robot,
             chargingTime: robot.chargingTime - 1,
-          }
+          };
         }
 
         if (robot.battery < MIN_BATTERY) {
