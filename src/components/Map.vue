@@ -82,11 +82,11 @@ export default {
   display: none;
 }
 
-.first-robot {
-  --border-color: green;
-}
 .last-robot {
   --border-color: red;
+}
+.first-robot {
+  --border-color: green;
 }
 .first-robot, .last-robot {
   border: 2px solid var(--border-color);
