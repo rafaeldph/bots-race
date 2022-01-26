@@ -13,7 +13,7 @@
     />
 
     <img
-      v-for="({ current: { x, y } }, i) in robots"
+      v-for="({ current: { x, y } }, i) in robots.filter(({ current: { x, y } }) => x != center.x || y != center.y)"
       :Key="i"
       src="../assets/robot.png"
       class="map-icon robot-icon"

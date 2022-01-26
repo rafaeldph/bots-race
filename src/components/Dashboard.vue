@@ -36,10 +36,16 @@
           i === podium.nearest && 'nearest-robot',
         ]"
       >
-        <div class="robot-title">Robot {{ (i + 1) }}</div>
-        <div>Recorrido: {{ robot.traveled }}</div>
-        <div>Restante: {{ robot.distance }}</div>
-        <div v-if="robot.distance > 0">Batería: {{ robot.battery }}%</div>
+        <div class="robot-current-info">
+          <div class="robot-title">Robot {{ (i + 1) }}</div>
+          <div>Recorrido: {{ robot.traveled }}m</div>
+          <div v-if="robot.distance > 0">Restante: {{ robot.distance }}m</div>
+          <div v-if="robot.distance > 0">Batería: {{ robot.battery }}%</div>
+          <div v-if="robot.distance === 0">Tiempo en llegar a la meta: {{ robot.finishedTimestamp }}s</div>
+        </div>
+        <div class="robot-goal-info" v-if="robot.distance === 0">
+          #{{ (1 + robots.map(({ finishedTimestamp }) => finishedTimestamp).filter(t => t > 0).sort((a, b) => a - b).findIndex(t => t === robot.finishedTimestamp)) }}
+        </div>
       </div>
     </div>
   </div>
@@ -143,23 +149,31 @@ export default {
 .robot-info {
   margin: 5px 10px;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 2px solid black;
   border-radius: 4px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--background-color);
 }
 
+.robot-goal-info {
+  padding: 5px;
+  border-radius: 4px;
+  background-color: black;
+  color: white;
+  font-weight: 700;
+}
+
 .walking-robot {
-  --background-color: yellow;
+  --background-color: rgba(255, 255, 0, 0.7);
 }
 .farthest-robot {
-  --background-color: red;
+  --background-color: rgba(200, 20, 20, 0.5);
 }
 .nearest-robot {
-  --background-color: green;
+  --background-color: rgba(20, 200, 20, 0.5);
 }
 
 .robot-title {
