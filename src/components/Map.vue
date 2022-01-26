@@ -13,13 +13,13 @@
     />
 
     <img
-      v-for="({ current: { x, y }, distance }, i) in robots"
-      :key="i"
+      v-for="({ current: { x, y }, distance, index }) in robots"
+      :key="index"
       src="../assets/robot.png"
       :class="[
         'map-icon', 
-        i === podium.farthest && 'last-robot', 
-        i === podium.nearest && 'first-robot',
+        index === podium.farthest && 'last-robot', 
+        index === podium.nearest && 'first-robot',
         distance === 0 && 'hidden-icon',
       ]"
       :style="{ top: `${y}%`, left: `${x}%` }"

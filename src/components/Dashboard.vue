@@ -27,17 +27,17 @@
       <p v-if="!started">Elige la meta haciendo clic en cualquier punto del mapa</p>
       <div 
         v-else 
-        v-for="(robot, i) in robots" 
-        :key="i" 
+        v-for="robot in robots" 
+        :key="robot.index" 
         :class="[
           'robot-info', 
           robot.distance !== 0 && 'walking-robot',
-          i === podium.farthest && 'farthest-robot', 
-          i === podium.nearest && 'nearest-robot',
+          robot.index === podium.farthest && 'farthest-robot', 
+          robot.index === podium.nearest && 'nearest-robot',
         ]"
       >
         <div class="robot-current-info">
-          <div class="robot-title">Robot {{ (i + 1) }}</div>
+          <div class="robot-title">Robot {{ (robot.index + 1) }}</div>
           <div>Recorrido: {{ robot.traveled }}m</div>
           <div v-if="robot.distance > 0">Restante: {{ robot.distance }}m</div>
           <div v-if="robot.distance > 0">Batería: {{ robot.battery }}%</div>

@@ -44,12 +44,13 @@ export default {
   },
   computed: {
     formattedRobots() {
-      return this.robots.map(({ initial, current, battery, finishedTimestamp }) => ({
+      return this.robots.map(({ initial, current, battery, finishedTimestamp }, index) => ({
         battery: formatNumber(battery),
         traveled: formatNumber(calculateDistance(initial, current) / this.delta),
         distance: formatNumber(calculateDistance(current, this.center) / this.delta),
         finishedTimestamp,
         current,
+        index,
       }));
     },
     robotIndexesPodium() {
